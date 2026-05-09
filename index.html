@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Para Ti, Mamá ✨</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@300;400&display=swap');
@@ -23,6 +23,9 @@
     overflow: hidden;
     font-family: 'Cormorant Garamond', serif;
     cursor: none;
+
+    touch-action: manipulation;
+-webkit-tap-highlight-color: transparent;
   }
 
   #cursor {
@@ -257,6 +260,17 @@
     opacity: 0;
     transition: opacity 2s ease;
   }
+
+  @media (hover: none) and (pointer: coarse) {
+  #cursor,
+  #cursor-ring {
+    display: none;
+  }
+
+  html, body {
+    cursor: auto;
+  }
+}
 </style>
 </head>
 <body>
@@ -1034,7 +1048,7 @@ function handleInteraction(e) {
 document.addEventListener('click', handleInteraction);
 document.addEventListener('touchstart', e => {
   if (phase !== 'galaxy') handleInteraction(e);
-}, { passive: true });
+}, { passive: false });
 
 // ─────────────────────────────────────────────
 // RESIZE
