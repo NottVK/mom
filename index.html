@@ -15,7 +15,7 @@ html,body{
   overflow:hidden;
   font-family:'Cormorant Garamond',serif;
   -webkit-tap-highlight-color:transparent;
-  touch-action:manipulation;
+  /* NO touch-action:manipulation aquí — lo manejamos por elemento */
 }
 
 /* ── CURSOR (desktop only) ── */
@@ -55,38 +55,57 @@ html,body{
 }
 
 /* ── INTRO ── */
-#phase-intro{text-align:center;opacity:0;transition:opacity 2s ease;padding:0 clamp(1rem,5vw,3rem);}
+#phase-intro{
+  text-align:center;opacity:0;transition:opacity 2s ease;
+  padding:0 clamp(1.2rem,6vw,3rem);
+  width:100%;
+}
 #phase-intro.visible{opacity:1;}
 #phase-intro h1{
   font-family:'Cinzel',serif;font-weight:300;
-  font-size:clamp(.95rem,3.5vw,2rem);
+  font-size:clamp(.92rem,3.8vw,2rem);
   color:rgba(240,244,255,.9);
-  letter-spacing:.12em;line-height:1.75;
+  letter-spacing:.1em;line-height:1.8;
   text-shadow:0 0 40px rgba(167,139,250,.8),0 0 80px rgba(167,139,250,.4);
-  max-width:min(680px,88vw);
+  max-width:min(680px,90vw);
+  margin:0 auto;
 }
 #tap-hint{
-  margin-top:clamp(1.5rem,4vh,3rem);
-  font-style:italic;font-size:clamp(.75rem,2vw,.95rem);
-  color:rgba(167,139,250,.6);letter-spacing:.28em;
+  margin-top:clamp(1.4rem,4vh,3rem);
+  font-style:italic;font-size:clamp(.72rem,2.2vw,.95rem);
+  color:rgba(167,139,250,.6);letter-spacing:.26em;
   animation:pulse 3s ease-in-out infinite;
 }
 
-/* ── MESSAGES ── */
-#messages{text-align:center;pointer-events:none;position:absolute;width:100%;padding:0 clamp(1rem,5vw,3rem);}
+/* ── MESSAGES ──
+   Cada mensaje se posiciona absolutamente centrado en pantalla.
+   Usamos position:fixed + transform para garantizar centrado real
+   en cualquier dispositivo, sin depender del flujo del padre.
+── */
 .msg{
+  position:fixed;
+  /* centrado perfecto en X e Y */
+  top:50%;left:50%;
+  transform:translate(-50%, calc(-50% + 20px));
+  width:90vw;
+  max-width:min(740px,90vw);
+  text-align:center;
   font-weight:300;
-  font-size:clamp(1.1rem,4.2vw,2.8rem);
+  font-size:clamp(1.05rem,4.5vw,2.8rem);
   color:rgba(240,244,255,.95);
-  letter-spacing:.06em;line-height:1.55;
-  opacity:0;transform:translateY(20px);
-  transition:opacity 1.5s ease,transform 1.5s ease;
+  letter-spacing:.06em;line-height:1.6;
+  opacity:0;
+  /* sin transition aquí — GSAP lo maneja */
   text-shadow:0 0 30px rgba(167,139,250,.9),0 0 60px rgba(236,72,153,.4);
-  max-width:min(740px,88vw);margin:0 auto;
+  padding:0 clamp(.8rem,4vw,2rem);
+  pointer-events:none;
+  z-index:10;
+  /* evitar que el texto se parta raro en móvil */
+  word-break:keep-all;
+  overflow-wrap:break-word;
 }
-.msg.active{opacity:1;transform:translateY(0);}
 .msg.mama{
-  font-size:clamp(2rem,9vw,5.5rem);
+  font-size:clamp(2rem,10vw,5.5rem);
   font-style:italic;
   background:linear-gradient(135deg,#f0f4ff 0%,#c4b5fd 40%,#f9a8d4 70%,#f0f4ff 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
@@ -96,15 +115,17 @@ html,body{
 
 /* ── TAP CTA ── */
 #tap-cta{
-  position:fixed;bottom:clamp(16px,5vh,40px);
+  position:fixed;bottom:clamp(18px,6vh,44px);
   left:50%;transform:translateX(-50%);
   z-index:20;font-family:'Cinzel',serif;
-  font-size:clamp(.5rem,1.6vw,.68rem);
-  letter-spacing:.3em;color:rgba(167,139,250,.5);
+  font-size:clamp(.5rem,1.8vw,.68rem);
+  letter-spacing:.28em;color:rgba(167,139,250,.5);
   text-transform:uppercase;opacity:0;
-  transition:opacity 1s ease;
+  transition:opacity .8s ease;
   animation:pulse 3s ease-in-out infinite;
   white-space:nowrap;padding:0 1rem;
+  /* área táctil generosa en móvil */
+  padding-top:12px;padding-bottom:12px;
 }
 
 /* ── GALAXY UI ── */
@@ -117,7 +138,7 @@ html,body{
   left:50%;transform:translateX(-50%);
   font-family:'Cinzel',serif;
   font-size:clamp(.5rem,1.4vw,.62rem);
-  letter-spacing:.3em;color:rgba(167,139,250,.4);
+  letter-spacing:.28em;color:rgba(167,139,250,.4);
   text-transform:uppercase;
   animation:pulse 4s ease-in-out infinite;
   white-space:nowrap;pointer-events:none;
@@ -126,16 +147,16 @@ html,body{
 /* ── CONSTELLATION PHRASES ── */
 .c-phrase{
   position:absolute;font-style:italic;font-weight:300;
-  font-size:clamp(.6rem,1.4vw,.95rem);
+  font-size:clamp(.58rem,1.4vw,.92rem);
   color:rgba(196,181,253,.8);
   text-shadow:0 0 18px rgba(167,139,250,.6);
-  letter-spacing:.08em;
+  letter-spacing:.07em;
   animation:float-p 8s ease-in-out infinite;
-  white-space:nowrap;max-width:30vw;
+  white-space:nowrap;max-width:32vw;
   overflow:hidden;text-overflow:ellipsis;
 }
 @media(max-width:600px){
-  .c-phrase{font-size:.58rem;max-width:38vw;letter-spacing:.04em;}
+  .c-phrase{font-size:.56rem;max-width:40vw;letter-spacing:.03em;}
   .c-phrase.hide-sm{display:none;}
 }
 @keyframes float-p{
@@ -152,7 +173,6 @@ html,body{
   animation:float-ph var(--d,7s) ease-in-out infinite;
   animation-delay:var(--dl,0s);
   background:rgba(10,5,30,.5);
-  /* size by breakpoint */
   width:clamp(72px,8.5vw,128px);
   height:clamp(72px,8.5vw,128px);
 }
@@ -191,7 +211,15 @@ html,body{
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
 
-@keyframes pulse{0%,100%{opacity:.3;}50%{opacity:.85;}}
+/* ── TAP OVERLAY — captura todos los toques en fases previas a galaxia ── */
+#tap-overlay{
+  position:fixed;inset:0;z-index:25;
+  background:transparent;
+  display:block;
+  /* se oculta cuando ya no hace falta */
+}
+
+@keyframes pulse{0%,100%{opacity:.28;}50%{opacity:.85;}}
 </style>
 </head>
 <body>
@@ -202,17 +230,20 @@ html,body{
 <canvas id="particle-canvas"></canvas>
 <div id="flash"></div>
 
+<!-- Overlay invisible que captura taps en móvil con máxima prioridad -->
+<div id="tap-overlay"></div>
+
 <div id="ui">
   <div id="phase-intro">
     <h1>Las estrellas se han alineado<br>para este día tan especial…</h1>
     <div id="tap-hint">toca para continuar</div>
   </div>
-  <div id="messages">
-    <div class="msg" id="msg1">Porque incluso el universo se queda pequeño…</div>
-    <div class="msg" id="msg2">para agradecer todo lo que has hecho por mí…</div>
-    <div class="msg mama" id="msg3">mamá ❤️</div>
-  </div>
 </div>
+
+<!-- Mensajes fuera del #ui, position:fixed independientes -->
+<div class="msg" id="msg1">Porque incluso el universo se queda pequeño…</div>
+<div class="msg" id="msg2">para agradecer todo lo que has hecho por mí…</div>
+<div class="msg mama" id="msg3">mamá ❤️</div>
 
 <div id="tap-cta">toca para continuar</div>
 <canvas id="galaxy-canvas"></canvas>
@@ -225,10 +256,10 @@ html,body{
 /* ─────────────────────────────────
    HELPERS
 ───────────────────────────────── */
-const W = ()=>window.innerWidth;
-const H = ()=>window.innerHeight;
-const isMob  = ()=>W()<=600;
-const isTab  = ()=>W()>600&&W()<=1024;
+const W=()=>window.innerWidth;
+const H=()=>window.innerHeight;
+const isMob=()=>W()<=600;
+const isTab=()=>W()>600&&W()<=1024;
 
 /* ─────────────────────────────────
    CURSOR
@@ -237,13 +268,14 @@ const $cursor=document.getElementById('cursor');
 const $ring=document.getElementById('cursor-ring');
 document.addEventListener('mousemove',e=>{
   $cursor.style.left=e.clientX+'px';$cursor.style.top=e.clientY+'px';
-  $ring.style.left=e.clientX+'px';  $ring.style.top=e.clientY+'px';
+  $ring.style.left=e.clientX+'px';$ring.style.top=e.clientY+'px';
 });
 
 /* ─────────────────────────────────
    STATE
 ───────────────────────────────── */
 let phase='intro', galaxyReady=false, canClick=false;
+let lastTapTime=0; // anti-doble-tap
 
 /* ─────────────────────────────────
    BG STARFIELD
@@ -254,7 +286,6 @@ let stars=[],travelSpeed=0,travelActive=false,lightBeam=null;
 let nebulaAlpha=0,nebulaTime=0;
 
 function resizeBg(){bgC.width=W();bgC.height=H();}
-
 function initStars(){
   stars=[];
   const N=Math.min(1200,W()*H()/600);
@@ -388,22 +419,52 @@ function revealUniverse(){
 
 /* ─────────────────────────────────
    MESSAGES
+   Cada .msg es position:fixed centrado.
+   GSAP anima opacity y translateY directamente.
 ───────────────────────────────── */
-const msgs=['msg1','msg2','msg3'].map(id=>document.getElementById(id));
+const msgs=[
+  document.getElementById('msg1'),
+  document.getElementById('msg2'),
+  document.getElementById('msg3')
+];
 let curMsg=-1;
 
 function showMsg(){
+  // Ocultar el anterior con GSAP
   if(curMsg>=0&&msgs[curMsg]){
     const old=msgs[curMsg];
-    gsap.to(old,{opacity:0,y:-20,duration:1,ease:'power2.in',onComplete:()=>old.classList.remove('active')});
+    gsap.to(old,{
+      opacity:0,
+      y:'-=24',       // sube un poco al salir
+      duration:.9,
+      ease:'power2.in',
+      onComplete:()=>{
+        gsap.set(old,{y:0}); // reset para no acumular
+      }
+    });
   }
+
   curMsg++;
-  if(curMsg>=msgs.length){setTimeout(launchGalaxy,800);return;}
-  msgs[curMsg].classList.add('active');
-  setTimeout(()=>spawnP(W()/2,H()/2,60,false),300);
+
+  if(curMsg>=msgs.length){
+    // Ocultar tap-overlay antes de lanzar galaxia
+    document.getElementById('tap-overlay').style.display='none';
+    setTimeout(launchGalaxy,800);
+    return;
+  }
+
+  const msg=msgs[curMsg];
+  // Partimos desde opacity 0 + desplazamiento hacia abajo
+  gsap.set(msg,{opacity:0,y:22});
+  // Animamos entrada
+  gsap.to(msg,{opacity:1,y:0,duration:1.1,ease:'power2.out'});
+
+  // Partículas decorativas
+  setTimeout(()=>spawnP(W()/2,H()/2,55,false),250);
+
   canClick=true;
   const cta=document.getElementById('tap-cta');
-  cta.style.opacity='1';
+  gsap.to(cta,{opacity:1,duration:.6,ease:'power2.out'});
   cta.textContent=curMsg===msgs.length-1?'toca para explorar el universo':'toca para continuar';
 }
 
@@ -412,10 +473,12 @@ function showMsg(){
 ───────────────────────────────── */
 function launchGalaxy(){
   phase='galaxy';canClick=false;
-  document.getElementById('tap-cta').style.opacity='0';
+  gsap.to(document.getElementById('tap-cta'),{opacity:0,duration:.4});
   const ui=document.getElementById('ui');
-  ui.style.opacity='0';ui.style.transition='opacity 1.5s ease';
-  setTimeout(()=>{ui.style.display='none';buildGalaxy();},1600);
+  gsap.to(ui,{opacity:0,duration:1.5,onComplete:()=>{ui.style.display='none';}});
+  // Ocultar mensajes restantes
+  msgs.forEach(m=>gsap.to(m,{opacity:0,duration:1}));
+  setTimeout(buildGalaxy,1600);
 }
 
 /* ─────────────────────────────────
@@ -424,7 +487,6 @@ function launchGalaxy(){
 let renderer,scene,camera,galaxyMesh,galaxyGroup;
 let isDrag=false,lastX=0,lastY=0,velX=0,velY=0,specialStars=[];
 
-// ── Todas las frases del día de la madre ──
 const starMsgs=[
   "Gracias por cuidarme.",
   "Eres mi lugar seguro.",
@@ -451,7 +513,6 @@ function buildGalaxy(){
   camera.position.set(0,28,55);camera.lookAt(0,0,0);
   galaxyGroup=new THREE.Group();scene.add(galaxyGroup);
 
-  /* particles */
   const N=28000,pos=new Float32Array(N*3),col=new Float32Array(N*3),sz=new Float32Array(N);
   const iC=new THREE.Color('#a78bfa'),oC=new THREE.Color('#1e3a5f'),aC=new THREE.Color('#f9a8d4');
   for(let i=0;i<N;i++){
@@ -482,7 +543,6 @@ function buildGalaxy(){
   });
   galaxyMesh=new THREE.Points(geo,mat);galaxyGroup.add(galaxyMesh);
 
-  /* core */
   galaxyGroup.add(new THREE.Mesh(new THREE.SphereGeometry(1.2,32,32),
     new THREE.MeshBasicMaterial({color:0xc4b5fd,transparent:true,opacity:.6})));
   const cm=new THREE.ShaderMaterial({
@@ -493,7 +553,6 @@ function buildGalaxy(){
   });
   galaxyGroup.add(new THREE.Mesh(new THREE.SphereGeometry(2.5,32,32),cm));
 
-  /* special stars */
   starMsgs.forEach((msg,i)=>{
     const angle=(i/starMsgs.length)*Math.PI*2,dist=13+Math.random()*10;
     const star=new THREE.Mesh(new THREE.SphereGeometry(.35,16,16),
@@ -505,7 +564,6 @@ function buildGalaxy(){
     galaxyGroup.add(star);specialStars.push(star);
   });
 
-  /* dust */
   const dN=5000,dp=new Float32Array(dN*3),dc=new Float32Array(dN*3);
   for(let i=0;i<dN;i++){
     const a=Math.random()*Math.PI*2,r=5+Math.random()*20,t=Math.random();
@@ -529,26 +587,16 @@ function buildGalaxy(){
 
 /* ─────────────────────────────────
    PHOTOS
-   ► Cambia aquí los nombres/rutas de tus fotos
 ───────────────────────────────── */
 function buildPhotos(){
-  const fotos=[
-    'img/foto1.jpeg',
-    'img/foto2.jpeg',
-    'img/foto3.jpeg',
-  ];
-  // posiciones para cada breakpoint — bordeando la pantalla
+  const fotos=['img/foto1.jpeg','img/foto2.jpeg','img/foto3.jpeg'];
   const layout=[
-    // foto 0: arriba-izquierda
     {d:{top:'13%',left:'2.5%'},t:{top:'11%',left:'2%'},m:{top:'9%',left:'2%'}},
-    // foto 1: derecha-centro
     {d:{top:'44%',right:'2.5%'},t:{top:'41%',right:'2%'},m:{top:'43%',right:'2%'}},
-    // foto 2: abajo-izquierda
     {d:{bottom:'13%',left:'2.5%'},t:{bottom:'11%',left:'2%'},m:{bottom:'12%',left:'2%'}},
   ];
   const durs=['7s','9s','6.5s'],dels=['0s','2s','3.5s'],icons=['🌟','💜','🌸'];
   const ui=document.getElementById('galaxy-ui');
-
   fotos.forEach((src,i)=>{
     const key=isMob()?'m':isTab()?'t':'d';
     const pos=layout[i][key];
@@ -557,7 +605,6 @@ function buildPhotos(){
     wrap.style.setProperty('--d',durs[i]);
     wrap.style.setProperty('--dl',dels[i]);
     Object.entries(pos).forEach(([k,v])=>wrap.style[k]=v);
-
     const img=document.createElement('img');
     img.src=src;img.alt='foto familiar';
     img.onerror=()=>{
@@ -571,17 +618,16 @@ function buildPhotos(){
 }
 
 /* ─────────────────────────────────
-   CONSTELLATION PHRASES
-   (día de la madre — más frases)
+   PHRASES
 ───────────────────────────────── */
 function buildPhrases(){
   const all=[
-    {t:"Gracias por cuidarme.",      p:{top:'7%',   left:'5%'},   r:'-3deg', sm:false},
-    {t:"Feliz Día, Mamá. ❤️",        p:{top:'20%',  right:'5%'},  r:'3.5deg',sm:true },
-    {t:"Eres mi lugar seguro.",       p:{top:'55%',  left:'4%'},   r:'2deg',  sm:true },
-    {t:"Tu amor no tiene límites.",   p:{bottom:'22%',right:'4%'}, r:'-4deg', sm:false},
-    {t:"Te quiero infinitamente.",    p:{bottom:'10%',left:'4%'},  r:'3deg',  sm:true },
-    {t:"Mi héroe favorito eres tú.",  p:{top:'78%',  right:'4%'},  r:'-2deg', sm:true },
+    {t:"Gracias por cuidarme.",      p:{top:'7%',left:'5%'},        r:'-3deg',sm:false},
+    {t:"Feliz Día, Mamá. ❤️",        p:{top:'20%',right:'5%'},      r:'3.5deg',sm:true},
+    {t:"Eres mi lugar seguro.",       p:{top:'55%',left:'4%'},       r:'2deg',  sm:true},
+    {t:"Tu amor no tiene límites.",   p:{bottom:'22%',right:'4%'},   r:'-4deg', sm:false},
+    {t:"Te quiero infinitamente.",    p:{bottom:'10%',left:'4%'},    r:'3deg',  sm:true},
+    {t:"Mi héroe favorito eres tú.",  p:{top:'78%',right:'4%'},      r:'-2deg', sm:true},
   ];
   const ui=document.getElementById('galaxy-ui');
   all.forEach((item,i)=>{
@@ -635,7 +681,6 @@ function setupInteraction(){
     if(!dragged&&e.changedTouches.length===1)hitTest(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
   });
   gc.addEventListener('wheel',e=>{zT=Math.max(18,Math.min(85,camera.position.z+e.deltaY*.05));e.preventDefault();},{passive:false});
-
   gc.addEventListener('click',e=>{if(!dragged)hitTest(e.clientX,e.clientY);});
 
   function hitTest(cx,cy){
@@ -655,7 +700,6 @@ function setupInteraction(){
       }
     }
   }
-
   window._zT=()=>zT;
 }
 
@@ -691,28 +735,50 @@ function startIntro(){
 }
 
 /* ─────────────────────────────────
-   CLICK / TOUCH
+   TAP HANDLER — máxima velocidad en móvil
+   Usamos touchstart en el tap-overlay (passive:true = sin bloqueo)
+   para respuesta INMEDIATA. El overlay está en z-index:25,
+   por encima de todo excepto el tooltip de galaxia.
 ───────────────────────────────── */
-function handleTap(e){
-  const x=e.clientX||(e.touches?.[0]?.clientX)||W()/2;
-  const y=e.clientY||(e.touches?.[0]?.clientY)||H()/2;
-  if(phase!=='galaxy')spawnP(x,y,20,false);
+const $overlay=document.getElementById('tap-overlay');
+
+function processInteraction(x,y){
+  // Anti-doble-disparo: ignorar si menos de 300ms desde el último tap
+  const now=Date.now();
+  if(now-lastTapTime<300)return;
+  lastTapTime=now;
+
+  if(phase!=='galaxy')spawnP(x,y,18,false);
   if(!canClick)return;
   canClick=false;
+
   if(phase==='intro'){
     phase='traveling';
     const pi=document.getElementById('phase-intro');
-    pi.style.opacity='0';pi.style.transition='opacity 1.5s ease';
+    gsap.to(pi,{opacity:0,duration:1.2});
     travelActive=true;
     gsap.to({s:0},{s:18,duration:3.5,ease:'power2.in',onUpdate:function(){travelSpeed=this.targets()[0].s;}});
     setTimeout(()=>{travelActive=false;lightBeam={p:0};},3200);
+
   }else if(phase==='messages'){
-    showMsg();document.getElementById('tap-cta').style.opacity='0';
+    // Ocultar CTA inmediatamente
+    gsap.to(document.getElementById('tap-cta'),{opacity:0,duration:.3});
+    showMsg();
   }
 }
 
-document.addEventListener('click',handleTap);
-document.addEventListener('touchstart',e=>{if(phase!=='galaxy')handleTap(e);},{passive:false});
+// touchstart passive:true → respuesta inmediata sin bloquear scroll
+$overlay.addEventListener('touchstart',e=>{
+  if(phase==='galaxy'){$overlay.style.display='none';return;}
+  const t=e.touches[0];
+  processInteraction(t.clientX,t.clientY);
+},{passive:true});
+
+// click para desktop (mouse)
+$overlay.addEventListener('click',e=>{
+  if(phase==='galaxy'){$overlay.style.display='none';return;}
+  processInteraction(e.clientX,e.clientY);
+});
 
 /* ─────────────────────────────────
    RESIZE
